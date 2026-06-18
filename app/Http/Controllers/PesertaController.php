@@ -18,7 +18,7 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok) {
+        if (!$kelompok) {
             return redirect()->route('peserta.kelompok.create');
         }
 
@@ -60,10 +60,13 @@ class PesertaController extends Controller
             'nama_usaha' => ['nullable', 'string', 'max:255'],
             'prodi' => ['nullable', 'string', 'max:255'],
             'anggota' => ['required', 'array', 'min:1'],
-            'anggota.*.nama' => ['required', 'string', 'max:255'],
-            'anggota.*.nim' => ['nullable', 'string', 'max:50'],
+            'anggota.*.nama' => ['required', 'string', 'max:255', "regex:/^[a-zA-Z\s.'-]+$/"],
+            'anggota.*.nim' => ['nullable', 'string', 'max:50', 'regex:/^[0-9]+$/'],
             'anggota.*.jabatan' => ['required', 'string', 'max:50'],
             'berkas' => ['required', 'file', 'mimes:pdf', 'max:5120'],
+        ], [
+            'anggota.*.nama.regex' => 'Nama anggota hanya boleh berisi huruf.',
+            'anggota.*.nim.regex' => 'NIM hanya boleh berisi angka.',
         ]);
 
         // Nomor antrean diberikan secara berurutan (First-Come, First-Served).
@@ -87,7 +90,7 @@ class PesertaController extends Controller
             ]);
         }
 
-        $path = $request->file('berkas')->store('berkas/'.$kelompok->id, 'public');
+        $path = $request->file('berkas')->store('berkas/' . $kelompok->id, 'public');
 
         Berkas::create([
             'kelompok_id' => $kelompok->id,
@@ -97,7 +100,7 @@ class PesertaController extends Controller
         ]);
 
         return redirect()->route('peserta.dashboard')
-            ->with('status', 'Pendaftaran berhasil. Nomor antrean Anda adalah #'.$nomorAntrean.'.');
+            ->with('status', 'Pendaftaran berhasil. Nomor antrean Anda adalah #' . $nomorAntrean . '.');
     }
 
     /**
@@ -107,7 +110,7 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok || $kelompok->status !== 'revisi') {
+        if (!$kelompok || $kelompok->status !== 'revisi') {
             return redirect()->route('peserta.dashboard');
         }
 
@@ -118,7 +121,7 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok || $kelompok->status !== 'revisi') {
+        if (!$kelompok || $kelompok->status !== 'revisi') {
             return redirect()->route('peserta.dashboard');
         }
 
@@ -126,7 +129,7 @@ class PesertaController extends Controller
             'berkas' => ['required', 'file', 'mimes:pdf', 'max:5120'],
         ]);
 
-        $path = $request->file('berkas')->store('berkas/'.$kelompok->id, 'public');
+        $path = $request->file('berkas')->store('berkas/' . $kelompok->id, 'public');
 
         Berkas::create([
             'kelompok_id' => $kelompok->id,
@@ -145,7 +148,7 @@ class PesertaController extends Controller
         ]);
 
         return redirect()->route('peserta.dashboard')
-            ->with('status', 'Berkas revisi berhasil diunggah ulang. Anda masuk antrean verifikasi kembali dengan nomor #'.$nomorAntrean.'.');
+            ->with('status', 'Berkas revisi berhasil diunggah ulang. Anda masuk antrean verifikasi kembali dengan nomor #' . $nomorAntrean . '.');
     }
 
     /**
@@ -155,13 +158,13 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok || $kelompok->status !== 'siap_pilih_jadwal') {
+        if (!$kelompok || $kelompok->status !== 'siap_pilih_jadwal') {
             return redirect()->route('peserta.dashboard');
         }
 
         $jadwals = Jadwal::orderBy('tanggal')->orderBy('jam_mulai')
             ->get()
-            ->filter(fn ($j) => $j->kuotaTersisa() > 0)
+            ->filter(fn($j) => $j->kuotaTersisa() > 0)
             ->values();
 
         return view('peserta.jadwal', compact('kelompok', 'jadwals'));
@@ -171,7 +174,7 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok || $kelompok->status !== 'siap_pilih_jadwal') {
+        if (!$kelompok || $kelompok->status !== 'siap_pilih_jadwal') {
             return redirect()->route('peserta.dashboard');
         }
 
@@ -195,7 +198,7 @@ class PesertaController extends Controller
     {
         $kelompok = $request->user()->kelompok;
 
-        if (! $kelompok || $kelompok->status !== 'terjadwal') {
+        if (!$kelompok || $kelompok->status !== 'terjadwal') {
             return redirect()->route('peserta.dashboard');
         }
 
@@ -203,6 +206,6 @@ class PesertaController extends Controller
 
         $pdf = Pdf::loadView('peserta.e-receipt-pdf', compact('kelompok'));
 
-        return $pdf->stream('e-receipt-'.$kelompok->nomor_kelompok.'.pdf');
+        return $pdf->stream('e-receipt-' . $kelompok->nomor_kelompok . '.pdf');
     }
 }

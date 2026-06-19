@@ -29,4 +29,15 @@ class AntreanController extends Controller
         return redirect()->route('admin.kelompok.show', $kelompok)
             ->with('status', 'Kelompok nomor antrean #'.$kelompok->nomor_antrean.' dipanggil untuk diproses.');
     }
+
+    public function konfirmasi()
+{
+    $kelompoks = Kelompok::with(['user', 'jadwal'])
+        ->where('status', 'menunggu_konfirmasi')
+        ->orderBy('updated_at')
+        ->get();
+
+    return view('admin.konfirmasi', compact('kelompoks'));
+}
+
 }

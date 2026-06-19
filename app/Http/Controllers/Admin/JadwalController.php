@@ -10,7 +10,13 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $jadwals = Jadwal::orderBy('tanggal')->orderBy('jam_mulai')->get();
+        $jadwals = Jadwal::with([
+            'kelompoks' => function ($query) {
+                $query->whereIn('status', ['menunggu_konfirmasi', 'terjadwal'])
+                    ->with('user')
+                    ->orderBy('updated_at');
+            }
+        ])->orderBy('tanggal')->orderBy('jam_mulai')->get();
 
         return view('admin.jadwal-index', compact('jadwals'));
     }

@@ -1,7 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Detail Kelompok')
 @section('content')
-<h4 class="mb-3">Detail Kelompok #{{ $kelompok->nomor_antrean }}</h4>
+<div class="d-flex align-items-center mb-3">
+    <a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary me-3">
+        <i class="bi bi-arrow-left"></i> Kembali
+    </a>
+    <h4 class="mb-0">Detail Kelompok #{{ $kelompok->nomor_antrean }}</h4>
+</div>
 
 <div class="row g-3">
     <div class="col-md-7">

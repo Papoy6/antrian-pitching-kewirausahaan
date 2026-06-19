@@ -29,7 +29,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
     Route::get('/login', [LoginController::class, 'create'])->name('login');
-    Route::post('/login', [LoginController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:5,1');
 });
 
 Route::post('/logout', [LoginController::class, 'destroy'])
@@ -66,6 +66,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/antrean', [AntreanController::class, 'index'])->name('antrean');
     Route::post('/antrean/{kelompok}/panggil', [AntreanController::class, 'panggil'])->name('antrean.panggil');
+    Route::get('/konfirmasi', [AntreanController::class, 'konfirmasi'])->name('konfirmasi');
 
     Route::get('/kelompok/{kelompok}', [KelompokController::class, 'show'])->name('kelompok.show');
     Route::post('/kelompok/{kelompok}/verifikasi', [KelompokController::class, 'verifikasi'])->name('kelompok.verifikasi');
@@ -84,3 +85,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware('auth')->group(function () {
     Route::get('/api/status', [StatusController::class, 'index'])->name('api.status');
 });
+
+Route::get('/konfirmasi', [AntreanController::class, 'konfirmasi'])->name('konfirmasi');

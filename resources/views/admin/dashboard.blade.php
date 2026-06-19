@@ -5,19 +5,25 @@
 
 <div class="row mb-4 g-3">
     @foreach([
-        ['label' => 'Menunggu Verifikasi', 'value' => $stats['menunggu_verifikasi'], 'color' => 'warning'],
-        ['label' => 'Revisi', 'value' => $stats['revisi'], 'color' => 'danger'],
-        ['label' => 'Siap Pilih Jadwal', 'value' => $stats['siap_pilih_jadwal'], 'color' => 'info'],
-        ['label' => 'Menunggu Konfirmasi', 'value' => $stats['menunggu_konfirmasi'], 'color' => 'primary'],
-        ['label' => 'Terjadwal', 'value' => $stats['terjadwal'], 'color' => 'success'],
-    ] as $card)
-    <div class="col-6 col-md">
+    ['label' => 'Menunggu Verifikasi', 'value' => $stats['menunggu_verifikasi'], 'color' => 'warning', 'url' => route('admin.antrean')],
+    ['label' => 'Revisi', 'value' => $stats['revisi'], 'color' => 'danger', 'url' => null],
+    ['label' => 'Siap Pilih Jadwal', 'value' => $stats['siap_pilih_jadwal'], 'color' => 'info', 'url' => null],
+    ['label' => 'Menunggu Konfirmasi', 'value' => $stats['menunggu_konfirmasi'], 'color' => 'primary', 'url' => route('admin.konfirmasi')],
+    ['label' => 'Terjadwal', 'value' => $stats['terjadwal'], 'color' => 'success', 'url' => null],
+] as $card)
+<div class="col-6 col-md">
+    @if($card['url'])
+    <a href="{{ $card['url'] }}" class="text-decoration-none">
+    @endif
         <div class="card p-3 text-center h-100">
             <div class="text-muted small">{{ $card['label'] }}</div>
             <div class="fs-3 fw-bold text-{{ $card['color'] }}">{{ $card['value'] }}</div>
         </div>
-    </div>
-    @endforeach
+    @if($card['url'])
+    </a>
+    @endif
+</div>
+@endforeach
 </div>
 
 <div class="row g-3">

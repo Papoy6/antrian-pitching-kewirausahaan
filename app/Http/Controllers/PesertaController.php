@@ -56,17 +56,21 @@ class PesertaController extends Controller
         }
 
         $data = $request->validate([
-            'nama_kelompok' => ['required', 'string', 'max:255'],
-            'nama_usaha' => ['nullable', 'string', 'max:255'],
+            'nama_kelompok' => ['required', 'string', 'max:255', 'unique:kelompoks,nama_kelompok'],
+            'nama_usaha' => ['nullable', 'string', 'max:255', 'unique:kelompoks,nama_usaha'],
             'prodi' => ['nullable', 'string', 'max:255'],
             'anggota' => ['required', 'array', 'min:1'],
             'anggota.*.nama' => ['required', 'string', 'max:255', "regex:/^[a-zA-Z\s.'-]+$/"],
-            'anggota.*.nim' => ['nullable', 'string', 'max:50', 'regex:/^[0-9]+$/'],
+            'anggota.*.nim' => ['nullable', 'string', 'max:50', 'regex:/^[0-9]+$/', 'distinct', 'unique:anggota_kelompoks,nim'],
             'anggota.*.jabatan' => ['required', 'string', 'max:50'],
             'berkas' => ['required', 'file', 'mimes:pdf', 'max:5120'],
         ], [
+            'nama_kelompok.unique' => 'Nama kelompok ini sudah digunakan, silakan gunakan nama lain.',
+            'nama_usaha.unique' => 'Nama usaha ini sudah digunakan kelompok lain, silakan gunakan nama lain.',
             'anggota.*.nama.regex' => 'Nama anggota hanya boleh berisi huruf.',
             'anggota.*.nim.regex' => 'NIM hanya boleh berisi angka.',
+            'anggota.*.nim.distinct' => 'NIM tidak boleh sama antar anggota dalam satu kelompok.',
+            'anggota.*.nim.unique' => 'NIM ini sudah terdaftar oleh kelompok lain.',
         ]);
 
         // Nomor antrean diberikan secara berurutan (First-Come, First-Served).

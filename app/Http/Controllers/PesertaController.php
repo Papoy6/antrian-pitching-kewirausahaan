@@ -189,6 +189,7 @@ class PesertaController extends Controller
         $kelompok->update([
             'jadwal_id' => $jadwal->id,
             'status' => 'menunggu_konfirmasi',
+            'catatan_revisi' => null,
         ]);
 
         return redirect()->route('peserta.dashboard')

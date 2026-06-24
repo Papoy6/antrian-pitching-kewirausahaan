@@ -1,7 +1,13 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Pilih Jadwal')
 @section('content')
 <h4 class="mb-3">Pilih Jadwal Pitching</h4>
+
+@if($kelompok->catatan_revisi)
+    <div class="alert alert-warning">
+        <strong>Jadwal sebelumnya perlu direvisi:</strong><br>{{ $kelompok->catatan_revisi }}
+    </div>
+@endif
 <div class="row">
 @forelse($jadwals as $j)
     <div class="col-md-4 mb-3">

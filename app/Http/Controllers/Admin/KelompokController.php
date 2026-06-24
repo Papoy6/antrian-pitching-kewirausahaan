@@ -60,6 +60,26 @@ class KelompokController extends Controller
             ->with('status', 'Kelompok "'.$kelompok->nama_kelompok.'" diminta merevisi berkas.');
     }
 
+
+    public function revisiJadwal(Request $request, Kelompok $kelompok)
+    {
+        $data = $request->validate([
+            'catatan_revisi' => ['required', 'string', 'max:1000'],
+        ]);
+
+        if ($kelompok->status !== 'menunggu_konfirmasi') {
+            return back()->withErrors(['konfirmasi' => 'Kelompok belum memilih jadwal atau sudah dikonfirmasi.']);
+        }
+
+        $kelompok->update([
+            'status' => 'siap_pilih_jadwal',
+            'jadwal_id' => null,
+            'catatan_revisi' => $data['catatan_revisi'],
+        ]);
+
+        return redirect()->route('admin.konfirmasi')
+            ->with('status', 'Kelompok "'.$kelompok->nama_kelompok.'" diminta memilih ulang jadwal pitching.');
+    }
     public function konfirmasi(Request $request, Kelompok $kelompok)
     {
         if ($kelompok->status !== 'menunggu_konfirmasi') {

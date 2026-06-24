@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Dashboard Peserta')
 @section('content')
 <h3 class="mb-4">Status Pendaftaran Pitching</h3>
@@ -43,7 +43,14 @@
 
     @if($kelompok->status === 'siap_pilih_jadwal')
         <hr>
-        <p>Berkas Anda telah diverifikasi lengkap. Silakan pilih jadwal pitching Anda.</p>
+        @if($kelompok->catatan_revisi)
+            <div class="alert alert-warning mb-3">
+                <strong>Catatan revisi jadwal dari petugas:</strong><br>{{ $kelompok->catatan_revisi }}
+            </div>
+            <p>Silakan pilih ulang jadwal pitching yang tersedia.</p>
+        @else
+            <p>Berkas Anda telah diverifikasi lengkap. Silakan pilih jadwal pitching Anda.</p>
+        @endif
         <a href="{{ route('peserta.jadwal') }}" class="btn btn-primary">Pilih Jadwal</a>
     @endif
 

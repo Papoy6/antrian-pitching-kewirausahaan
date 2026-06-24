@@ -71,6 +71,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/kelompok/{kelompok}', [KelompokController::class, 'show'])->name('kelompok.show');
     Route::post('/kelompok/{kelompok}/verifikasi', [KelompokController::class, 'verifikasi'])->name('kelompok.verifikasi');
     Route::post('/kelompok/{kelompok}/tolak', [KelompokController::class, 'tolak'])->name('kelompok.tolak');
+    Route::post('/kelompok/{kelompok}/revisi-jadwal', [KelompokController::class, 'revisiJadwal'])->name('kelompok.revisi-jadwal');
     Route::post('/kelompok/{kelompok}/konfirmasi', [KelompokController::class, 'konfirmasi'])->name('kelompok.konfirmasi');
     Route::get('/kelompok/{kelompok}/e-receipt', [KelompokController::class, 'eReceipt'])->name('kelompok.e-receipt');
 

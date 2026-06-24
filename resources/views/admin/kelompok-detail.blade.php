@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Detail Kelompok')
 @section('content')
 <div class="d-flex align-items-center mb-3">
@@ -56,15 +56,27 @@
                     <button class="btn btn-danger w-100">Tolak / Minta Revisi</button>
                 </form>
             @elseif($kelompok->status === 'menunggu_konfirmasi')
-                <p class="mb-2">Jadwal terpilih:
-                    <strong>
-                        {{ $kelompok->jadwal?->tanggal?->translatedFormat('d F Y') }}
-                        {{ \Illuminate\Support\Carbon::parse($kelompok->jadwal?->jam_mulai)->format('H:i') }}
-                    </strong>
-                </p>
-                <form method="POST" action="{{ route('admin.kelompok.konfirmasi', $kelompok) }}">
+                <div class="alert alert-info">
+                    <div class="fw-bold mb-1">Jadwal terpilih</div>
+                    <div>
+                        {{ $kelompok->jadwal?->tanggal?->translatedFormat('d F Y') }},
+                        {{ \Illuminate\Support\Carbon::parse($kelompok->jadwal?->jam_mulai)->format('H:i') }} -
+                        {{ \Illuminate\Support\Carbon::parse($kelompok->jadwal?->jam_selesai)->format('H:i') }}
+                        ({{ $kelompok->jadwal?->ruangan }})
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ route('admin.kelompok.konfirmasi', $kelompok) }}" class="mb-3">
                     @csrf
                     <button class="btn btn-primary w-100">Konfirmasi Akhir &amp; Terbitkan E-Receipt</button>
+                </form>
+
+                <hr>
+                <form method="POST" action="{{ route('admin.kelompok.revisi-jadwal', $kelompok) }}">
+                    @csrf
+                    <label class="form-label">Catatan revisi jadwal</label>
+                    <textarea name="catatan_revisi" class="form-control mb-2" rows="3" placeholder="Contoh: Jadwal bentrok, silakan pilih jadwal lain." required></textarea>
+                    <button class="btn btn-warning w-100">Minta Revisi Jadwal</button>
                 </form>
             @elseif($kelompok->status === 'terjadwal')
                 <p class="mb-2">Nomor Kelompok: <strong>{{ $kelompok->nomor_kelompok }}</strong></p>

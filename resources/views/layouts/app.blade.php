@@ -85,6 +85,36 @@
             text-decoration: none !important;
         }
 
+
+        .app-navbar .navbar-nav,
+        .app-navbar .navbar-nav .nav-item,
+        .app-navbar .navbar-user,
+        .app-navbar .navbar-user form {
+            display: flex;
+            align-items: center;
+        }
+
+        .app-navbar .navbar-user {
+            gap: .75rem;
+            min-height: 2.25rem;
+        }
+
+        .app-navbar .navbar-user .user-label {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .app-navbar .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.25rem;
+            padding: .38rem .75rem;
+            line-height: 1;
+            transform: none;
+        }
         .container.pb-5 { position: relative; padding-top: .35rem; }
 
         .container.pb-5 > h3,
@@ -209,6 +239,61 @@
                 justify-content: space-between;
             }
         }
+
+        /* navbar logout v2 fix */
+        .app-navbar .navbar-user {
+            align-self: center;
+        }
+
+        .app-navbar .navbar-user form {
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .app-navbar .navbar-user .user-label {
+            min-height: 2.25rem;
+        }
+
+        .app-navbar .logout-btn {
+            position: relative;
+            top: 3px;
+            height: 2.25rem;
+            min-height: 2.25rem;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* navbar logout v3 final align */
+        .app-navbar .navbar-user {
+            gap: 1.15rem;
+            align-items: center;
+        }
+
+        .app-navbar .navbar-user form {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .app-navbar .navbar-user .user-label {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.25rem;
+            line-height: 1;
+        }
+
+        .app-navbar .logout-btn {
+            position: relative;
+            top: 1px;
+            margin-left: .15rem;
+            height: 2.2rem;
+            min-height: 2.2rem;
+            padding: 0 .78rem;
+            line-height: 1;
+        }
     </style>
     @stack('styles')
 </head>
@@ -236,13 +321,13 @@
             </li>
         </ul>
         @endif
-        <div class="d-flex align-items-center">
-            <span class="text-white me-3 small">
+        <div class="navbar-user d-flex align-items-center">
+            <span class="user-label text-white small">
                 {{ auth()->user()->name }} &middot; {{ auth()->user()->isAdmin() ? 'Petugas BPA' : 'Peserta' }}
             </span>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button class="btn btn-sm btn-outline-light">Keluar</button>
+                <button class="btn btn-sm btn-outline-light logout-btn">Keluar</button>
             </form>
         </div>
         @endauth
@@ -271,3 +356,6 @@
 @stack('scripts')
 </body>
 </html>
+
+
+
